@@ -1,0 +1,66 @@
+<?php
+session_start();
+
+$tema = $_SESSION['tema'] ?? 'claro';
+if ($tema === 'escuro') {
+    echo "<body style='background-color: #222; color: #eee'>";
+} else {
+    echo "<body style='background-color: #fff; color: #000'>";
+}
+
+if (!isset($_SESSION['usuario'])) {
+    echo "<div class='container'>";
+    echo "<h2 class='title'>Login necessário</h2>";
+    echo "<form class='login-form' method='POST' action='login.php'>";
+    echo "<div class='form-group'>";
+    echo "<label for='usuario'>Usuário:</label>";
+    echo "<input type='text' id='usuario' name='usuario' required>";
+    echo "</div>";
+    
+    echo "<div class='form-group'>";
+    echo "<label for='senha'>Senha:</label>";
+    echo "<input type='password' id='senha' name='senha' required>";
+    echo "</div>";
+    
+    echo "<div class='form-group'>";
+    echo "<label for='tema'>Tema:</label>";
+    echo "<select name='tema' id='tema'>";
+    echo "<option value='claro'>Claro</option>";
+    echo "<option value='escuro'>Escuro</option>";
+    echo "</select>";
+    echo "</div>";
+    
+    echo "<input type='submit' value='Entrar' class='submit-btn'>";
+    echo "</form>";
+    echo "</div>";
+    exit;
+}
+
+$produtos = ['camisa', 'calça', 'sapato', 'boné', 'meia', 'Toalha', 'Chinelo', 'Roupas intimas', 'Bermuda'];
+$filtro = $_GET['busca'] ?? '';
+echo "<div class='container'>";
+echo "<h2 class='title'>Olá, " . $_SESSION['usuario'] . "!</h2>";
+
+echo "<div class='search-form'>";
+echo "<form method='GET'>";
+echo "Buscar produto: ";
+echo "<input type='text' name='busca' value='$filtro'>";
+echo "<input type='submit' value='Pesquisar'>";
+echo "</form>";
+echo "</div>";
+
+echo "<ul class='product-list'>";
+foreach ($produtos as $p) {
+    if ($filtro === '' || str_contains(strtolower($p), strtolower($filtro))) {
+        echo "<li>$p</li>";
+    }
+}
+echo "</ul>";
+
+echo "<a href='index.php' class='logout-link'>Sair</a>";
+echo "<div id='currentTime' class='time-display'></div>";
+echo "</div>";
+
+echo "<script src='script.js'></script>";
+?>
+
